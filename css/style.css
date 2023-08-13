@@ -1,0 +1,131 @@
+/* Reset default margin and padding for all elements */
+body,
+h1,
+h2,
+p,
+div,
+form,
+input,
+button {
+  margin: 0;
+  padding: 0;
+}
+
+/* Default styles */
+:root {
+  --bg-color: white;
+  --text-color: black;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Dark mode styles */
+.dark-mode {
+  --bg-color: #333;
+  --text-color: #fff;
+}
+
+.header {
+  margin-top: 1rem;
+  padding: 1rem 0;
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--bg-color);
+}
+
+/* Main content area should grow to fill available space */
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+    height: 100vh;
+
+}
+
+/* Style your forms */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+
+
+#search-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+#task-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.header {
+  padding-top: 4rem;
+  margin-bottom: 1rem;
+}
+input {
+  padding: 0.1rem 0.3rem;
+}
+
+.search-input {
+  height: 30px;
+  width: 350px;
+}
+
+
+.btn {
+  background-color: red;
+  color: white;
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.3rem;
+  border: none;
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+.done {
+  background-color: rgb(30, 173, 30);
+}
+#task-form{
+  margin-bottom: 2rem;
+}
+/* Style your tasks */
+#tasks {
+  width: 100%; /* Make the table width span the full page */
+  font-size: 1.3rem;
+  border-collapse: collapse;
+}
+
+#tasks th,
+#tasks td {
+  padding: 0.5rem;
+  text-align: center; /* Center-align the text within cells */
+}
+
+#tasks thead {
+  font-weight: bold;
+  background-color: rgb(249, 245, 240);
+}
+
+#tasks tbody {
+  margin-top: 1rem;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  #tasks {
+    font-size: 1rem;
+  }
+
+}
