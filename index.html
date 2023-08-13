@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>TODO List</title>
+  </head>
+  <body>
+    <header class="header">
+      <h1>TODO List</h1>
+      <button id="mode-toggle">Toggle Mode</button>
+    </header>
+    <main class="main">
+      <form id="task-form">
+        <div class="add-task">
+          <input type="text" class="task-input" placeholder="Add new task..." />
+          <button class="btn add" type="submit">Add</button>
+        </div>
+        <input type="text" class="search-input" placeholder="Search tasks..." />
+      </form>
+      <table id="tasks">
+        <thead>
+          <tr class="first-row">
+            <th class="id-column">ID</th>
+            <th class="description-column">TODO Description</th>
+            <th class="userId-coulmn">User ID</th>
+            <th class="status-coulmn">Status</th>
+            <th class="actions-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+   
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5">
+              <footer class="footer">
+                <p>Total tasks: <span id="task-count">0</span></p>
+              </footer>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </main>
+    <footer class="footer">Ahmadomar</footer>
+    <script src="./js/index.js"></script>
+  </body>
+</html>
