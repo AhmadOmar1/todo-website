@@ -9,7 +9,7 @@ const taskCountSpan = document.getElementById("task-count");
 let lastRowId = 0;
 let totalTaskCount = 0; 
 
-const addRow = (id, todo,status,userId) => {
+const addRow = (id, todo,userId,status) => {
   const newRow = document.createElement("tr");
   newRow.innerHTML = `
     <td>${id}</td>
@@ -55,3 +55,24 @@ getTasks();
 const updateTaskCount = () => {
   taskCountSpan.textContent = totalTaskCount;
 };
+
+
+// add a new task 
+
+function getRandomUserId() {
+    return Math.floor(Math.random() * 50);
+  }
+  
+taskForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const todo = taskInput.value;
+    if (todo === "") {
+      return;
+    }
+    const newId = totalTaskCount + 1;
+    const newRow = addRow(newId, todo,getRandomUserId(), "Pending");
+    tbody.appendChild(newRow);
+    totalTaskCount += 1;
+    updateTaskCount();
+    taskInput.value = "";
+  });
