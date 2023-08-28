@@ -7,7 +7,8 @@ const searchInput = document.querySelector(".search-input");
 const apiUrl = "https://dummyjson.com/todo";
 let lastRowId = 0;
 let totalTaskCount = 0;
-
+const editButton = `<i class='bx bxs-edit'></i>`
+const saveButton = `<button class="btn save">Save</button>`
 const addRow = (id, todo, status, userId) => {
   const newRow = document.createElement("tr");
   newRow.innerHTML = `
@@ -19,8 +20,8 @@ const addRow = (id, todo, status, userId) => {
      <div class="buttons-list"> 
         <button class="btn delete">Delete</button>
         <button class="btn done">Done</button>
-        <button class="btn save">Save</button>
-        <i class='bx bxs-edit'></i>
+        ${saveButton}
+        ${editButton}
       </div>
     </td>
   `;
@@ -164,7 +165,6 @@ function handleTaskEvents(e) {
     markTaskAsDone(e.target);
   } else if (e.target.classList.contains("delete")) {
     deleteTask(e.target);
-
   } else if (e.target.classList.contains("bxs-edit")) {
     toggleEdit(e.target);
   } else if (e.target.classList.contains("save")) {
@@ -185,14 +185,12 @@ function toggleEdit(editIcon) {
 
     editInput.value = todoText;
     todoCell.appendChild(editInput);
-
+    console.log(todoText);
     console.log(editInput.value);
+    editIcon.style.display = "none";
 
     const saveButton = row.querySelector(".save");
     saveButton.style.display = "inline-block";
-    editIcon.style.display = "none";
-
-
 
 
 
@@ -209,20 +207,27 @@ function saveEditedTask(saveButton) {
   const taskIndex = allTasks.findIndex(task => task.id === parseInt(id));
 
   const newTodo = editInput.value;
+
+  if (newTodo === "") {
+    alert("Please enter a new task");
+    return;
+  }
   todoCell.textContent = newTodo;
 
   if (id && taskIndex !== -1) {
-    allTasks[taskIndex].completed = true;
+    allTasks[taskIndex].completed = false;
     allTasks[taskIndex].todo = newTodo;
     idCell.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML =
-      "<del>Completed</del>";
+      "Pending";
     updatetoApi(id);
     setTasksToLocalStorage(allTasks);
-
+    const editButton = row.querySelector(".bxs-edit");
+    saveButton.style.display = "none";
+    editButton.style.display = "inline-block";
   }
-  const editButton = row.querySelector(".edit");
-  editButton.style.display = "inline-block";
-  saveButton.style.display = "none";
+
+
+
 
 
 }
@@ -303,11 +308,7 @@ const debounce = (func, delay) => {
 
 
 
-tbody.addEventListener("click", (e) => {
-  handleTaskEvents(e);
 
-
-});
 
 searchInput.addEventListener("input", debounce(
 
