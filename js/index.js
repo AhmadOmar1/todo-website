@@ -19,6 +19,7 @@ const addRow = (id, todo, status, userId) => {
      <div class="buttons-list"> 
         <button class="btn delete">Delete</button>
         <button class="btn done">Done</button>
+        <button class="btn save">Save</button>
         <i class='bx bxs-edit'></i>
       </div>
     </td>
@@ -50,7 +51,7 @@ async function getTasks() {
     }
     const data = await response.json();
     const fetchedTasks = data.todos;
-   
+
     let storedTasks = JSON.parse(localStorage.getItem('tasks'));
     if (!storedTasks) {
       const response = await fetch(`${apiUrl}?limit=20`);
@@ -63,9 +64,9 @@ async function getTasks() {
       localStorage.setItem('tasks', JSON.stringify(storedTasks));
     }
 
-   
+
     addTasksToTable(storedTasks);
-    return fetchedTasks; 
+    return fetchedTasks;
   } catch (error) {
     console.log(`Error fetching the data: ${error}`);
   }
@@ -157,14 +158,74 @@ async function updatetoApi(id) {
 }
 
 
-function handleTaskEvents(e){
-  if(e.target.classList.contains("done")){
-     markTaskAsDone(e.target);
-  } else if (e.target.classList.contains("delete")){
+function handleTaskEvents(e) {
+
+  if (e.target.classList.contains("done")) {
+    markTaskAsDone(e.target);
+  } else if (e.target.classList.contains("delete")) {
     deleteTask(e.target);
+
+  } else if (e.target.classList.contains("bxs-edit")) {
+    toggleEdit(e.target);
+  } else if (e.target.classList.contains("save")) {
+    saveEditedTask(e.target);
   }
 }
 
+function toggleEdit(editIcon) {
+  const row = editIcon.closest("tr");
+  const todoCell = row.querySelector("td:nth-child(2)");
+
+  if (todoCell) {
+    const todoText = todoCell.textContent;
+
+    todoCell.innerHTML = '';
+
+    const editInput = document.createElement("input");
+
+    editInput.value = todoText;
+    todoCell.appendChild(editInput);
+
+    console.log(editInput.value);
+
+    const saveButton = row.querySelector(".save");
+    saveButton.style.display = "inline-block";
+    editIcon.style.display = "none";
+
+
+
+
+
+  }
+}
+
+function saveEditedTask(saveButton) {
+  const row = saveButton.closest("tr");
+  const todoCell = row.querySelector("td:nth-child(2)");
+  const editInput = todoCell.querySelector("input");
+  const idCell = row.querySelector("td:first-child");
+  const id = idCell.textContent;
+  const allTasks = getTasksFromLocalStorage();
+  const taskIndex = allTasks.findIndex(task => task.id === parseInt(id));
+
+  const newTodo = editInput.value;
+  todoCell.textContent = newTodo;
+
+  if (id && taskIndex !== -1) {
+    allTasks[taskIndex].completed = true;
+    allTasks[taskIndex].todo = newTodo;
+    idCell.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML =
+      "<del>Completed</del>";
+    updatetoApi(id);
+    setTasksToLocalStorage(allTasks);
+
+  }
+  const editButton = row.querySelector(".edit");
+  editButton.style.display = "inline-block";
+  saveButton.style.display = "none";
+
+
+}
 
 
 function markTaskAsDone(doneButton) {
@@ -178,8 +239,8 @@ function markTaskAsDone(doneButton) {
     allTasks[taskIndex].completed = true;
     idCell.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML =
       "<del>Completed</del>";
-      updatetoApi(id);
-      setTasksToLocalStorage(allTasks);
+    updatetoApi(id);
+    setTasksToLocalStorage(allTasks);
 
   }
 }
@@ -231,26 +292,35 @@ const clearTable = () => {
 };
 const debounce = (func, delay) => {
   let debounceTimer
-  return function() {
-      const context = this
-      const args = arguments
-          clearTimeout(debounceTimer)
-              debounceTimer
-          = setTimeout(() => func.apply(context, args), delay)
+  return function () {
+    const context = this
+    const args = arguments
+    clearTimeout(debounceTimer)
+    debounceTimer
+      = setTimeout(() => func.apply(context, args), delay)
   }
 }
+
+
+
+tbody.addEventListener("click", (e) => {
+  handleTaskEvents(e);
+
+
+});
+
 searchInput.addEventListener("input", debounce(
 
- () => {
-  let text = searchInput.value.trim();
-  console.log(text);
-  if (text === "") {
-    clearTable();
-    let tasks = getTasksFromLocalStorage();
-    addTasksToTable(tasks);
-  } else {
-    filterTasks(text);
-  }
-},600
+  () => {
+    let text = searchInput.value.trim();
+    console.log(text);
+    if (text === "") {
+      clearTable();
+      let tasks = getTasksFromLocalStorage();
+      addTasksToTable(tasks);
+    } else {
+      filterTasks(text);
+    }
+  }, 600
 
 ));

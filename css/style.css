@@ -99,6 +99,15 @@ input {
 .done {
   background-color: rgb(30, 173, 30);
 }
+.save{
+  display: none;
+  background: #32AD60;
+  color: #ffffff;
+  
+  &:hover{
+    background: darken(#32AD60, 10%);
+  }
+}
 #task-form {
   margin-bottom: 2rem;
 }
